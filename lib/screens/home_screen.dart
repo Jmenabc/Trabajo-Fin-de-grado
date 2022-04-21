@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lions_film/dialogs/privacy_policy.dart';
 import 'package:lions_film/providers/providers.dart';
-import 'package:lions_film/screens/home_page.dart';
+import 'package:lions_film/controlers/login_controller.dart';
 import 'package:lions_film/screens/login_screen.dart';
 import 'package:lions_film/screens/screen.dart';
 import 'package:lions_film/screens/shorts_screen.dart';
@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                 title: const Text('Login'),
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Login()));
+                      MaterialPageRoute(builder: (context) => LoginController()));
                 },
               ),
               const Divider(),
