@@ -1,6 +1,7 @@
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:lions_film/tiles/add_short_formulary.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ShortsScreen extends StatelessWidget {
   const ShortsScreen({Key? key}) : super(key: key);
@@ -21,7 +22,13 @@ class ShortsScreen extends StatelessWidget {
           })
         ],
       ),
-
     );
+  }
+}
+
+class FireStorageServices extends ChangeNotifier {
+  FireStorageServices();
+  static Future<dynamic> loadVideo(BuildContext context, String video) async {
+    return await FirebaseStorage.instance.ref().child(video).getDownloadURL();
   }
 }

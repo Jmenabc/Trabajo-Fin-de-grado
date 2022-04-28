@@ -48,6 +48,7 @@ dependencies:
   fab_circular_menu: ^1.0.0
   image_picker: ^0.8.5
   file_picker: ^4.5.1
+  firebase_storage: ^10.2.13
 
 
 flutter_icons:

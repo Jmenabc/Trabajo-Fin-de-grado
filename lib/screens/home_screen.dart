@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                 title: const Text('Login'),
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginController()));
+                      MaterialPageRoute(builder: (context) => const LoginController()));
                 },
               ),
               const Divider(),

@@ -4,6 +4,8 @@ import 'package:lions_film/tiles/logged_info_user.dart';
 import '../screens/login_screen.dart';
 
 class LoginController extends StatelessWidget {
+  const LoginController({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
