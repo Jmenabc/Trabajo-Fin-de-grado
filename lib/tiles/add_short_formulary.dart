@@ -49,7 +49,7 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
   Future uploadData() async {
     if (file == null) return "error";
 
-    final fileName = (file!.path);
+    final fileName = (file!.uri.pathSegments.last);
     final destination = 'files/$fileName';
 
     FirebaseApi.uploadFile(destination,file!);

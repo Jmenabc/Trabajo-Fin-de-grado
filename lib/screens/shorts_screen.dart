@@ -1,5 +1,5 @@
 import 'package:fab_circular_menu/fab_circular_menu.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as fire_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:lions_film/tiles/add_short_formulary.dart';
@@ -39,18 +39,27 @@ class _ShortsScreenState extends State<ShortsScreen> {
         ),
         body: FutureBuilder(
           future: listExample(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            return GridView.count(crossAxisCount: 2, children: [
-              Container(
-                color: Colors.red, // child: Text(snapshot.toString()),
-              )
-            ]);
+          builder: (BuildContext context, AsyncSnapshot<ListResult> snapshot) {
+
+            return GridView.count(
+                crossAxisCount: 2,
+                children:
+                    snapshot.data?.items.map((e) => Text(e.name)).toList() ??
+                        []);
           },
         ));
   }
 }
 
-Future<void> listExample() async {
-  final storageRef = FirebaseStorage.instance.ref().child("files/uid");
-  final listResult = await storageRef.listAll();
+Future<ListResult> listExample() async {
+  final storageRef =
+      fire_storage.FirebaseStorage.instance.ref().child("files").listAll();
+  return storageRef;
+}
+
+//Hacer metodo que devuelva image.memory y le paso el uint8List, que es lo que me viene del getData me da el uint8List
+
+Future<Image> getImage() async {
+  final storageRef = fire_storage.FirebaseStorage.instance.ref().child("files").getData();
+
 }
