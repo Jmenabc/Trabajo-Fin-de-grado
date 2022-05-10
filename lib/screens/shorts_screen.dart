@@ -1,7 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fire_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:lions_film/models/firebase_file.dart';
+import 'package:lions_film/providers/firebase_info.dart';
 import 'package:lions_film/tiles/add_short_formulary.dart';
 
 class ShortsScreen extends StatefulWidget {
@@ -12,6 +16,15 @@ class ShortsScreen extends StatefulWidget {
 }
 
 class _ShortsScreenState extends State<ShortsScreen> {
+  late Future<List<FirebaseFile>> futureFiles;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    futureFiles = FireBaseInfo().listAll('files/');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,29 +50,43 @@ class _ShortsScreenState extends State<ShortsScreen> {
                 }),
           ],
         ),
-        body: FutureBuilder(
-          future: listExample(),
-          builder: (BuildContext context, AsyncSnapshot<ListResult> snapshot) {
-
-            return GridView.count(
-                crossAxisCount: 2,
-                children:
-                    snapshot.data?.items.map((e) => Text(e.name)).toList() ??
-                        []);
-          },
-        ));
+        body: FutureBuilder<List<FirebaseFile>>(
+            future: futureFiles,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return const Center(child: CircularProgressIndicator());
+                default:
+                  if (snapshot.hasError) {
+                    return const Center(
+                        child: Text(
+                            'Se ha producido un error \ intentelo mas tarde'));
+                  } else {
+                    final files = snapshot.data!;
+                    return ListView.builder(
+                        itemCount: files.length,
+                        itemBuilder: (context, index) {
+                          final file = files[index];
+                          return buildFile(context, file);
+                        });
+                  }
+              }
+            }));
   }
-}
 
-Future<ListResult> listExample() async {
-  final storageRef =
-      fire_storage.FirebaseStorage.instance.ref().child("files").listAll();
-  return storageRef;
-}
-
-//Hacer metodo que devuelva image.memory y le paso el uint8List, que es lo que me viene del getData me da el uint8List
-
-Future<Image> getImage() async {
-  final storageRef = fire_storage.FirebaseStorage.instance.ref().child("files").getData();
-
+  Widget buildFile(BuildContext context, FirebaseFile file) {
+    double height = MediaQuery.of(context).size.height;
+    return Column(
+      children: [
+        SizedBox(
+          height: height*0.45,
+          child: Image(image: NetworkImage(file.url)),
+        ),
+        SizedBox(
+          height: height*0.45,
+          child: Text(file.name),
+        )
+      ],
+    );
+  }
 }

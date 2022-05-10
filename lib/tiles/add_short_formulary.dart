@@ -24,7 +24,7 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
           child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             child: Text(fileName),
           ),
           ElevatedButton(
@@ -38,20 +38,19 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
                 });
               },
               child: const Icon(Icons.add)),
-          ElevatedButton(onPressed: () {
-            uploadData();
-          }, child: Text('Subir Archivo'))
+          ElevatedButton(
+              onPressed: () {
+                uploadData();
+              },
+              child: const Text('Subir Archivo'))
         ],
       )),
     );
   }
 
-  Future uploadData() async {
-    if (file == null) return "error";
-
+  void uploadData() async {
     final fileName = (file!.uri.pathSegments.last);
     final destination = 'files/$fileName';
-
-    FirebaseApi.uploadFile(destination,file!);
+    FirebaseApi.uploadFile(destination, file!);
   }
 }

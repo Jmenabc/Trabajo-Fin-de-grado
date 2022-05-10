@@ -84,7 +84,7 @@ class HomeScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                               ShortsScreen())); //TODO: crear página de cortos y empezar diseño grafico
+                               const ShortsScreen())); //TODO: crear página de cortos y empezar diseño grafico
                 },
               ),
             ],
