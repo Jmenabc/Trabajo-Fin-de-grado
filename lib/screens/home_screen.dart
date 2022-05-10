@@ -69,15 +69,6 @@ class HomeScreen extends StatelessWidget {
               const Divider(),
               const SizedBox(height: 8),
               ListTile(
-                title: const Text('Quienes somos'),
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const WeAre()));
-                },
-              ),
-              const Divider(),
-              const SizedBox(height: 8),
-              ListTile(
                 title: const Text('Cortos'),
                 onTap: () {
                   Navigator.push(

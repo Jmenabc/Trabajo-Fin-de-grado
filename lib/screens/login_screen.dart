@@ -12,23 +12,42 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: const Text('Login'),
       ),
       body: Padding(
           padding: const EdgeInsets.all(32),
           child: Column(
             children: [
-              const Spacer(),
-              const FlutterLogo(size: 120),
-              const Spacer(),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Inicia tu sesión con Google',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Container(
+                  padding: const EdgeInsets.all(16),
+                  child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Image(
+                          height: 75,
+                          image: NetworkImage(
+                              'https://logodownload.org/wp-content/uploads/2014/09/google-logo-1.png')))),
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Inicia tu sesión con Google',
+                    style: TextStyle(fontSize: 24),
+                  ),
                 ),
               ),
-              const Spacer(),
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Disfruta de los cortos de la comunidad\nDisfruta de nuestra cartelera\ny de mucho mas',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                ),
+              ),
+              const Spacer(flex: 24),
               ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                       primary: Colors.white,
@@ -47,8 +66,7 @@ class LoginScreen extends StatelessWidget {
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: const Text(
-                    'Inicia sesión en nuestra App para poder disfrutar de las ventajas de poder subir tus propios cortos, actualmente solo esta disponible el inicio de sesión con Google',
-                    style: TextStyle(fontSize: 8),
+                    'Inicia tu sesión con Google 100% seguro'
                   ))
             ],
           )),

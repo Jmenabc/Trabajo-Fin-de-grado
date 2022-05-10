@@ -17,6 +17,7 @@ class ShortsScreen extends StatefulWidget {
 
 class _ShortsScreenState extends State<ShortsScreen> {
   late Future<List<FirebaseFile>> futureFiles;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -28,7 +29,10 @@ class _ShortsScreenState extends State<ShortsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          elevation: 0,
+          title: const Text('Cortos'),
+        ),
         floatingActionButton: FabCircularMenu(
           ringColor: Colors.grey,
           children: [
@@ -60,10 +64,11 @@ class _ShortsScreenState extends State<ShortsScreen> {
                   if (snapshot.hasError) {
                     return const Center(
                         child: Text(
-                            'Se ha producido un error \ intentelo mas tarde'));
+                            'Se ha producido un error \n intentelo mas tarde'));
                   } else {
                     final files = snapshot.data!;
-                    return ListView.builder(
+                    return ListView.separated(
+                         separatorBuilder: (context,index) => const Divider(),
                         itemCount: files.length,
                         itemBuilder: (context, index) {
                           final file = files[index];
@@ -76,17 +81,9 @@ class _ShortsScreenState extends State<ShortsScreen> {
 
   Widget buildFile(BuildContext context, FirebaseFile file) {
     double height = MediaQuery.of(context).size.height;
-    return Column(
-      children: [
-        SizedBox(
-          height: height*0.45,
-          child: Image(image: NetworkImage(file.url)),
-        ),
-        SizedBox(
-          height: height*0.45,
-          child: Text(file.name),
-        )
-      ],
+    return ListTile(
+      leading: Image(image: NetworkImage(file.url)),
+      title: Text(file.name),
     );
   }
 }
