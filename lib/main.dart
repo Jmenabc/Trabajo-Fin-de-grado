@@ -6,7 +6,7 @@ import 'package:lions_film/screens/screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
- void  main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations(
@@ -44,8 +44,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         initialRoute: 'home',
         // home: const HomeScreen(),
-        theme: ThemeData.dark()
-            .copyWith(appBarTheme: const AppBarTheme(color: Colors.transparent)),
+        theme: ThemeData.dark().copyWith(
+            appBarTheme: const AppBarTheme(color: Colors.transparent)),
       ),
     );
   }
