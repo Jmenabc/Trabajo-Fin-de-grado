@@ -4,6 +4,7 @@ import 'package:lions_film/models/firebase_file.dart';
 import 'package:lions_film/providers/firebase_info.dart';
 import 'package:lions_film/tiles/add_short_formulary.dart';
 import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 
 class ShortsScreen extends StatefulWidget {
   const ShortsScreen({Key? key}) : super(key: key);
@@ -29,26 +30,15 @@ class _ShortsScreenState extends State<ShortsScreen> {
           elevation: 0,
           title: const Text('Cortos'),
         ),
-        floatingActionButton: FabCircularMenu(
-          ringColor: Colors.grey,
-          children: [
-            IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddShortFormulary()));
-                }),
-            IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddShortFormulary()));
-                }),
-          ],
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.grey,
+          child: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AddShortFormulary()));
+          },
         ),
         body: FutureBuilder<List<FirebaseFile>>(
             future: futureFiles,
@@ -58,9 +48,20 @@ class _ShortsScreenState extends State<ShortsScreen> {
                   return const Center(child: CircularProgressIndicator());
                 default:
                   if (snapshot.hasError) {
-                    return const Center(
-                        child: Text(
-                            'Limite de espacio en App\nalcanzado intentelo mas tarde'));
+                    return Center(
+                      child: Column(
+                        children: [
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.all(32),
+                            child: const Text(
+                                'Limite de espacio en App\nalcanzado intentelo mas tarde'),
+                          ),
+                          const CircularProgressIndicator(),
+                          const Spacer()
+                        ],
+                      ),
+                    );
                   } else {
                     final files = snapshot.data!;
                     return ListView.separated(
@@ -76,25 +77,40 @@ class _ShortsScreenState extends State<ShortsScreen> {
   }
 
   Widget buildFile(BuildContext context, FirebaseFile file) {
-    _controller = VideoPlayerController.network(file.url)
-      ..initialize().then((_) {
-        setState(() {});
-      });
-    double height = MediaQuery.of(context).size.height;
+    final videoPlayerController = VideoPlayerController.network(file.url);
+    final chewieController = ChewieController(
+      videoPlayerController: videoPlayerController,
+      autoPlay: true,
+      looping: true,
+      additionalOptions: (context) {
+        return <OptionItem>[
+          OptionItem(
+            onTap: () => debugPrint('My option works!'),
+            iconData: Icons.chat,
+            title: 'My localized title',
+          ),
+          OptionItem(
+            onTap: () => debugPrint('Another option working!'),
+            iconData: Icons.chat,
+            title: 'Another localized title',
+          ),
+        ];
+      },
+    );
+    final playerWidget = Chewie(
+      controller: chewieController,
+    );
+
     return ListTile(
       // leading: Image(image: NetworkImage(file.url)),
       title: Text(file.name),
       trailing: IconButton(
           onPressed: () {
-            Container(
-              padding: const EdgeInsets.all(8),
-              child: _controller?.value.isInitialized ?? false
-                  ? AspectRatio(
-                      aspectRatio: _controller!.value.aspectRatio,
-                      child: VideoPlayer(_controller!),
-                    )
-                  : Container(),
-            );
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return playerWidget;
+                });
           },
           icon: const Icon(Icons.remove_red_eye)),
     );

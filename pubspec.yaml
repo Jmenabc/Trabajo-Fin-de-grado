@@ -52,11 +52,12 @@ dependencies:
   flutter_bloc: ^8.0.1
   video_player: ^2.4.1
   flutter_native_splash: ^2.1.6
+  chewie: ^1.3.2
 
 flutter_native_splash:
   android: true
   ios: true
-  color: "#111011"
+  color: "#FFFFFF"
   image: "assets/splashLog.png"
 
 flutter_icons:
