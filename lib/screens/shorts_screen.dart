@@ -82,20 +82,6 @@ class _ShortsScreenState extends State<ShortsScreen> {
       videoPlayerController: videoPlayerController,
       autoPlay: true,
       looping: true,
-      additionalOptions: (context) {
-        return <OptionItem>[
-          OptionItem(
-            onTap: () => debugPrint('My option works!'),
-            iconData: Icons.chat,
-            title: 'My localized title',
-          ),
-          OptionItem(
-            onTap: () => debugPrint('Another option working!'),
-            iconData: Icons.chat,
-            title: 'Another localized title',
-          ),
-        ];
-      },
     );
     final playerWidget = Chewie(
       controller: chewieController,
@@ -109,7 +95,7 @@ class _ShortsScreenState extends State<ShortsScreen> {
             showDialog(
                 context: context,
                 builder: (context) {
-                  return playerWidget;
+                  return Card(child: playerWidget);
                 });
           },
           icon: const Icon(Icons.remove_red_eye)),
