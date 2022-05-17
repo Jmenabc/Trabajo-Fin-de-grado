@@ -13,41 +13,7 @@ class LoggedInfoUser extends StatelessWidget {
         title: const Text('Información del usuario'),
         centerTitle: true,
       ),
-      body: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Center(
-              child: CircleAvatar(
-                radius: 40,
-                backgroundImage: NetworkImage(user!.photoURL!),
-              ),
-            ),
-          ),
-          Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text(user.displayName!),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Text(user.email!),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Text(
-                    "Correo Verificado: ${user.emailVerified == false ? "Verifica tu correo no estas seguro pana" : "Verificado"}"),
-              ),
-            ],
-          )
-        ],
-      )
-
-
-
-
-      /*Column(
+      body: Column(
         children: [
           Container(
             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -69,11 +35,13 @@ class LoggedInfoUser extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text(
-                "Correo Verificado: ${user.emailVerified == false ? "Verifica tu correo no estas seguro pana" : "Verificado"}"),
+                "Correo Verificado: ${user.emailVerified == false
+                    ? "Verifica tu correo no estas seguro pana"
+                    : "Verificado"}"),
           ),
 
         ],
-      ),*/
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lions_film/controlers/short_controller.dart';
 import 'package:lions_film/dialogs/privacy_policy.dart';
 import 'package:lions_film/providers/providers.dart';
 import 'package:lions_film/controlers/login_controller.dart';
@@ -75,7 +76,7 @@ class HomeScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                               const ShortsScreen())); //TODO: crear página de cortos y empezar diseño grafico
+                               const ShortController())); //TODO: crear página de cortos y empezar diseño grafico
                 },
               ),
             ],
