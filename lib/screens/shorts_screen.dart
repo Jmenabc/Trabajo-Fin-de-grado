@@ -1,5 +1,6 @@
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lions_film/models/firebase_file.dart';
 import 'package:lions_film/providers/firebase_info.dart';
 import 'package:lions_film/tiles/add_short_formulary.dart';
@@ -21,6 +22,12 @@ class _ShortsScreenState extends State<ShortsScreen> {
   void initState() {
     super.initState();
     futureFiles = FireBaseInfo().listAll('files/');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller!.dispose();
   }
 
   @override
@@ -80,8 +87,12 @@ class _ShortsScreenState extends State<ShortsScreen> {
     final videoPlayerController = VideoPlayerController.network(file.url);
     final chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
-      autoPlay: true,
-      looping: true,
+      allowMuting: true,
+      allowedScreenSleep: true,
+      allowPlaybackSpeedChanging: false,
+
+      looping: false,
+      autoInitialize: true,
     );
     final playerWidget = Chewie(
       controller: chewieController,

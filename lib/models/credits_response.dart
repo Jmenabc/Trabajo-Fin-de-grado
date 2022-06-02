@@ -66,6 +66,8 @@ class Cast {
   String? department;
   String? job;
 
+
+
   factory Cast.fromJson(String str) => Cast.fromMap(json.decode(str));
 
 
