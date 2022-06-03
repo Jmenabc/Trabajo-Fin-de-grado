@@ -35,54 +35,10 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
         child: Center(
           child: Column(
             children: [
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: TextField(
-                    decoration:
-                        const InputDecoration(label: Text('Descripción')),
-                    onChanged: (descriptionData) {
-                      description = descriptionData;
-                    },
-                  ),
-                ),
-              ),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: TextField(
-                    decoration: const InputDecoration(label: Text('Artista')),
-                    onChanged: (artistData) {
-                      artist = artistData;
-                    },
-                  ),
-                ),
-              ),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: TextField(
-                    decoration: const InputDecoration(label: Text('Correo')),
-                    onChanged: (emailData) {
-                      email = emailData;
-                    },
-                  ),
-                ),
-              ),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                        label: Text('Número de teléfono')),
-                    onChanged: (phoneNumberData) {
-                      phoneNumberData == ""
-                          ? phoneNumberData = "No disponible"
-                          : phoneNumber = phoneNumberData;
-                    },
-                  ),
-                ),
-              ),
+              descriptionContainer(),
+              artistContainer(),
+              emailContainer(),
+              phoneNumberContainer(),
               Container(
                 padding: const EdgeInsets.all(16),
                 child: const Text('Pulse aqui para añadir su archivo'),
@@ -120,28 +76,7 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
                   },
                   child: const Text('Subir Archivo')),
               const Divider(height: 24),
-              Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                        padding: const EdgeInsets.all(16),
-                        child: const Text('Reglas de Lions Film')),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Image.asset('assets/logo123.jpeg'),
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      child: const Text(
-                          'En Lions Film priorizamos mucho la seguridad de nuestros usuarios, por ello cualquier persona que intente atentar contra las normas de la Aplicación como a los demas será severamente baneado de esta aplicación y no podra subir cortos nunca mas.\n\nNormas:\n\n1.- Solo se pueden subir cortos cualquier otro tipo de archivo sera eliminado y si se sube en exceso el que lo postee será baneado\n\n2.- Los cortos no deben durar mas de 3 minutos\n\n3.- Poner el nombre en el archivo antes de subirlo\n\n4.- Pasarlo bien y disfrutar'),
-                    ),
-                  )
-                ],
-              )
+              lionsFilmRules()
             ],
           ),
         ),
@@ -149,9 +84,95 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
     );
   }
 
+  Center phoneNumberContainer() {
+    return Center(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  decoration: const InputDecoration(
+                      label: Text('Número de teléfono')),
+                  onChanged: (phoneNumberData) {
+                    phoneNumberData == ""
+                        ? phoneNumberData = "No disponible"
+                        : phoneNumber = phoneNumberData;
+                  },
+                ),
+              ),
+            );
+  }
+
+  Center emailContainer() {
+    return Center(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  decoration: const InputDecoration(label: Text('Correo')),
+                  onChanged: (emailData) {
+                    email = emailData;
+                  },
+                ),
+              ),
+            );
+  }
+
+  Center artistContainer() {
+    return Center(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  decoration: const InputDecoration(label: Text('Artista')),
+                  onChanged: (artistData) {
+                    artist = artistData;
+                  },
+                ),
+              ),
+            );
+  }
+
+  Center descriptionContainer() {
+    return Center(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  decoration:
+                      const InputDecoration(label: Text('Descripción')),
+                  onChanged: (descriptionData) {
+                    description = descriptionData;
+                  },
+                ),
+              ),
+            );
+  }
+
+  Column lionsFilmRules() {
+    return Column(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                      padding: const EdgeInsets.all(16),
+                      child: const Text('Reglas de Lions Film')),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Image.asset('assets/logo123.jpeg'),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: const Text(
+                        'En Lions Film priorizamos mucho la seguridad de nuestros usuarios, por ello cualquier persona que intente atentar contra las normas de la Aplicación como a los demas será severamente baneado de esta aplicación y no podra subir cortos nunca mas.\n\nNormas:\n\n1.- Solo se pueden subir cortos cualquier otro tipo de archivo sera eliminado y si se sube en exceso el que lo postee será baneado\n\n2.- Los cortos no deben durar mas de 3 minutos\n\n3.- Poner el nombre en el archivo antes de subirlo\n\n4.- Pasarlo bien y disfrutar'),
+                  ),
+                )
+              ],
+            );
+  }
+
   void uploadData() async {
     final fileName = (file!.uri.pathSegments.last);
     final destination = 'files/$fileName';
     FirebaseApi.uploadFile(destination, file!);
   }
+
 }
