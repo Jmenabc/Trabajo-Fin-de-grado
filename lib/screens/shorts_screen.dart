@@ -27,7 +27,7 @@ class _ShortsScreenState extends State<ShortsScreen> {
   @override
   void dispose() {
     super.dispose();
-    _controller!.dispose();
+    _controller?.dispose() ?? _controller!.pause();
   }
 
   @override

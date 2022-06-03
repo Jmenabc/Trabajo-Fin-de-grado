@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,12 +13,21 @@ class AddShortFormulary extends StatefulWidget {
 }
 
 class _AddShortFormularyState extends State<AddShortFormulary> {
+  //Datos del modelo
+  String description = "";
+  String artist = "";
+  String email = "";
+  String? phoneNumber;
+
   File? file;
   UploadTask? task;
 
   @override
   Widget build(BuildContext context) {
     final fileName = file != null ? (file!.path) : "no file selected";
+
+    //Referencia a la collección
+    // final destination = 'shortInf/$filePath';
     return Scaffold(
       appBar: AppBar(elevation: 0, title: const Text('Subir Cortos')),
       body: Form(
@@ -25,6 +35,54 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
         child: Center(
           child: Column(
             children: [
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: TextField(
+                    decoration:
+                        const InputDecoration(label: Text('Descripción')),
+                    onChanged: (descriptionData) {
+                      description = descriptionData;
+                    },
+                  ),
+                ),
+              ),
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: TextField(
+                    decoration: const InputDecoration(label: Text('Artista')),
+                    onChanged: (artistData) {
+                      artist = artistData;
+                    },
+                  ),
+                ),
+              ),
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: TextField(
+                    decoration: const InputDecoration(label: Text('Correo')),
+                    onChanged: (emailData) {
+                      email = emailData;
+                    },
+                  ),
+                ),
+              ),
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                        label: Text('Número de teléfono')),
+                    onChanged: (phoneNumberData) {
+                      phoneNumberData == ""
+                          ? phoneNumberData = "No disponible"
+                          : phoneNumber = phoneNumberData;
+                    },
+                  ),
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.all(16),
                 child: const Text('Pulse aqui para añadir su archivo'),
@@ -50,8 +108,15 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
                 ),
               ),
               ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     uploadData();
+                    CollectionReference ref = FirebaseFirestore.instance.collection(fileName);
+                    await ref.add({
+                      'Description': description, // John Doe
+                      'artist': artist, // Stokes and Sons
+                      'email': email,
+                      'phoneNumber': phoneNumber
+                    }).then((value) => Navigator.pop(context));
                   },
                   child: const Text('Subir Archivo')),
               const Divider(height: 24),
