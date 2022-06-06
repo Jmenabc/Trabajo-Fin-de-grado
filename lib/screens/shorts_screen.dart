@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:lions_film/models/firebase_file.dart';
 import 'package:lions_film/providers/firebase_info.dart';
 import 'package:lions_film/tiles/add_short_formulary.dart';
+import 'package:lions_film/tiles/short_tile.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
@@ -90,7 +91,6 @@ class _ShortsScreenState extends State<ShortsScreen> {
       allowMuting: true,
       allowedScreenSleep: true,
       allowPlaybackSpeedChanging: false,
-
       looping: false,
       autoInitialize: true,
     );
@@ -103,11 +103,13 @@ class _ShortsScreenState extends State<ShortsScreen> {
       title: Text(file.name),
       trailing: IconButton(
           onPressed: () {
-            showDialog(
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ShorTile()));
+            /*showDialog(
                 context: context,
                 builder: (context) {
                   return Card(child: playerWidget);
-                });
+                });*/
           },
           icon: const Icon(Icons.remove_red_eye)),
     );

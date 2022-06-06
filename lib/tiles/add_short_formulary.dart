@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:lions_film/models/short_model.dart';
 import 'package:lions_film/providers/firebase_api.dart';
 
 class AddShortFormulary extends StatefulWidget {
@@ -13,12 +15,15 @@ class AddShortFormulary extends StatefulWidget {
 }
 
 class _AddShortFormularyState extends State<AddShortFormulary> {
+  ShortModel short = ShortModel();
+
   //Datos del modelo
+  final uid = FirebaseAuth.instance.currentUser?.uid;
   String description = "";
   String artist = "";
   String email = "";
   String? phoneNumber;
-
+  String filename = "";
   File? file;
   UploadTask? task;
 
@@ -39,6 +44,7 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
               artistContainer(),
               emailContainer(),
               phoneNumberContainer(),
+              nameContainer(),
               Container(
                 padding: const EdgeInsets.all(16),
                 child: const Text('Pulse aqui para añadir su archivo'),
@@ -66,13 +72,10 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
               ElevatedButton(
                   onPressed: () async {
                     uploadData();
-                    CollectionReference ref = FirebaseFirestore.instance.collection(fileName);
-                    await ref.add({
-                      'Description': description, // John Doe
-                      'artist': artist, // Stokes and Sons
-                      'email': email,
-                      'phoneNumber': phoneNumber
-                    }).then((value) => Navigator.pop(context));
+                    await FirebaseFirestore.instance
+                        .collection(uid!)
+                        .add(short.toJson());
+                    Navigator.pop(context);
                   },
                   child: const Text('Subir Archivo')),
               const Divider(height: 24),
@@ -86,87 +89,99 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
 
   Center phoneNumberContainer() {
     return Center(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  decoration: const InputDecoration(
-                      label: Text('Número de teléfono')),
-                  onChanged: (phoneNumberData) {
-                    phoneNumberData == ""
-                        ? phoneNumberData = "No disponible"
-                        : phoneNumber = phoneNumberData;
-                  },
-                ),
-              ),
-            );
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: TextField(
+          decoration: const InputDecoration(label: Text('Número de teléfono')),
+          onChanged: (phoneNumberData) {
+            phoneNumberData == ""
+                ? phoneNumberData = "No disponible"
+                : short.phoneNumber = phoneNumberData;
+          },
+        ),
+      ),
+    );
   }
 
   Center emailContainer() {
     return Center(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  decoration: const InputDecoration(label: Text('Correo')),
-                  onChanged: (emailData) {
-                    email = emailData;
-                  },
-                ),
-              ),
-            );
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: TextField(
+          decoration: const InputDecoration(label: Text('Correo')),
+          onChanged: (emailData) {
+            short.email = emailData;
+          },
+        ),
+      ),
+    );
   }
 
   Center artistContainer() {
     return Center(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  decoration: const InputDecoration(label: Text('Artista')),
-                  onChanged: (artistData) {
-                    artist = artistData;
-                  },
-                ),
-              ),
-            );
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: TextField(
+          decoration: const InputDecoration(label: Text('Artista')),
+          onChanged: (artistData) {
+            short.artist = artistData;
+          },
+        ),
+      ),
+    );
   }
 
   Center descriptionContainer() {
     return Center(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  decoration:
-                      const InputDecoration(label: Text('Descripción')),
-                  onChanged: (descriptionData) {
-                    description = descriptionData;
-                  },
-                ),
-              ),
-            );
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: TextField(
+          decoration: const InputDecoration(label: Text('Descripción')),
+          onChanged: (descriptionData) {
+            short.description = descriptionData;
+          },
+        ),
+      ),
+    );
+  }
+
+  Center nameContainer() {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: TextField(
+          decoration: const InputDecoration(label: Text('Nombre')),
+          onChanged: (nameData) {
+            short.name = nameData;
+          },
+        ),
+      ),
+    );
   }
 
   Column lionsFilmRules() {
     return Column(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                      padding: const EdgeInsets.all(16),
-                      child: const Text('Reglas de Lions Film')),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Image.asset('assets/logo123.jpeg'),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: const Text(
-                        'En Lions Film priorizamos mucho la seguridad de nuestros usuarios, por ello cualquier persona que intente atentar contra las normas de la Aplicación como a los demas será severamente baneado de esta aplicación y no podra subir cortos nunca mas.\n\nNormas:\n\n1.- Solo se pueden subir cortos cualquier otro tipo de archivo sera eliminado y si se sube en exceso el que lo postee será baneado\n\n2.- Los cortos no deben durar mas de 3 minutos\n\n3.- Poner el nombre en el archivo antes de subirlo\n\n4.- Pasarlo bien y disfrutar'),
-                  ),
-                )
-              ],
-            );
+      children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: Container(
+              padding: const EdgeInsets.all(16),
+              child: const Text('Reglas de Lions Film')),
+        ),
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Image.asset('assets/logo123.jpeg'),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: const Text(
+                'En Lions Film priorizamos mucho la seguridad de nuestros usuarios, por ello cualquier persona que intente atentar contra las normas de la Aplicación como a los demas será severamente baneado de esta aplicación y no podra subir cortos nunca mas.\n\nNormas:\n\n1.- Solo se pueden subir cortos cualquier otro tipo de archivo sera eliminado y si se sube en exceso el que lo postee será baneado\n\n2.- Los cortos no deben durar mas de 3 minutos\n\n3.- Poner el nombre en el archivo antes de subirlo\n\n4.- Pasarlo bien y disfrutar'),
+          ),
+        )
+      ],
+    );
   }
 
   void uploadData() async {
@@ -174,5 +189,4 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
     final destination = 'files/$fileName';
     FirebaseApi.uploadFile(destination, file!);
   }
-
 }
