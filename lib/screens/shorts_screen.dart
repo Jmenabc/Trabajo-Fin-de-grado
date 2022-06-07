@@ -1,6 +1,6 @@
-import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lions_film/models/firebase_file.dart';
 import 'package:lions_film/providers/firebase_info.dart';
 import 'package:lions_film/tiles/add_short_formulary.dart';
@@ -18,6 +18,7 @@ class ShortsScreen extends StatefulWidget {
 class _ShortsScreenState extends State<ShortsScreen> {
   VideoPlayerController? _controller;
   late Future<List<FirebaseFile>> futureFiles;
+  final uid = FirebaseAuth.instance.currentUser?.uid;
 
   @override
   void initState() {
@@ -72,16 +73,73 @@ class _ShortsScreenState extends State<ShortsScreen> {
                     );
                   } else {
                     final files = snapshot.data!;
-                    return ListView.separated(
-                        separatorBuilder: (context, index) => const Divider(),
-                        itemCount: files.length,
-                        itemBuilder: (context, index) {
-                          final file = files[index];
-                          return buildFile(context, file);
-                        });
+                    return StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('$uid')
+                          .snapshots(),
+                      builder: (context,
+                          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                              snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        return buildList(context, snapshot, files);
+                      },
+                    );
                   }
               }
             }));
+  }
+
+  ListView buildList(BuildContext context,
+      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot, List files) {
+    return ListView.builder(
+        itemCount: snapshot.data?.docs.length,
+        itemBuilder: (BuildContext context, int index) {
+          final file = files[index];
+          DocumentSnapshot ds = snapshot.data!.docs[index];
+          return buildCard(ds);
+        });
+  }
+
+  Card buildCard(DocumentSnapshot<Object?> ds) {
+    return Card(
+      child: ExpansionTile(
+        title: Text('${ds['name']}'),
+        subtitle: Text('${ds['artist']}'),
+        children: [
+          const Divider(),
+          titleData(text: 'Correo'),
+          titleInfo(text: '${ds['email']}', icon: Icons.email_outlined),
+          const Divider(),
+          titleData(text: 'Número de Teléfono'),
+          titleInfo(text: '${ds['phoneNumber']}', icon: Icons.phone_outlined),
+          const Divider(),
+          titleData(text: 'Descripción'),
+          titleInfo(text: '${ds['description']}', icon: Icons.text_fields_outlined),
+        ],
+      ),
+    );
+  }
+
+  Align titleData({required String text}) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Container(padding: const EdgeInsets.all(8), child: Text(text)),
+    );
+  }
+
+  Align titleInfo({required String text, required IconData icon}) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Row(
+        children: [
+          Container(padding: const EdgeInsets.all(8),child:  Icon(icon)),
+          Container(padding: const EdgeInsets.all(8), child: Text(text)),
+        ],
+      ),
+    );
   }
 
   Widget buildFile(BuildContext context, FirebaseFile file) {
