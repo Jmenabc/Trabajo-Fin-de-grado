@@ -99,11 +99,11 @@ class _ShortsScreenState extends State<ShortsScreen> {
         itemBuilder: (BuildContext context, int index) {
           final file = files[index];
           DocumentSnapshot ds = snapshot.data!.docs[index];
-          return buildCard(ds);
+          return buildCard(ds, file);
         });
   }
 
-  Card buildCard(DocumentSnapshot<Object?> ds) {
+  Card buildCard(DocumentSnapshot<Object?> ds, FirebaseFile file) {
     return Card(
       child: ExpansionTile(
         title: Text('${ds['name']}'),
@@ -117,7 +117,10 @@ class _ShortsScreenState extends State<ShortsScreen> {
           titleInfo(text: '${ds['phoneNumber']}', icon: Icons.phone_outlined),
           const Divider(),
           titleData(text: 'Descripción'),
-          titleInfo(text: '${ds['description']}', icon: Icons.text_fields_outlined),
+          titleInfo(
+              text: '${ds['description']}', icon: Icons.text_fields_outlined),
+          const Divider(),
+          buildFile(context, file)
         ],
       ),
     );
@@ -135,7 +138,7 @@ class _ShortsScreenState extends State<ShortsScreen> {
       alignment: Alignment.topLeft,
       child: Row(
         children: [
-          Container(padding: const EdgeInsets.all(8),child:  Icon(icon)),
+          Container(padding: const EdgeInsets.all(8), child: Icon(icon)),
           Container(padding: const EdgeInsets.all(8), child: Text(text)),
         ],
       ),
@@ -150,26 +153,21 @@ class _ShortsScreenState extends State<ShortsScreen> {
       allowedScreenSleep: true,
       allowPlaybackSpeedChanging: false,
       looping: false,
-      autoInitialize: true,
+      autoInitialize: false,
     );
     final playerWidget = Chewie(
       controller: chewieController,
     );
 
-    return ListTile(
-      // leading: Image(image: NetworkImage(file.url)),
-      title: Text(file.name),
-      trailing: IconButton(
+    return TextButton(
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ShorTile()));
-            /*showDialog(
+            showDialog(
                 context: context,
                 builder: (context) {
                   return Card(child: playerWidget);
-                });*/
+                });
           },
-          icon: const Icon(Icons.remove_red_eye)),
-    );
+          child: const Text('Reproducir Corto'),
+        );
   }
 }
