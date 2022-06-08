@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:lions_film/models/short_model.dart';
 import 'package:lions_film/providers/firebase_api.dart';
+import 'package:lions_film/screens/home_screen.dart';
 
 class AddShortFormulary extends StatefulWidget {
   const AddShortFormulary({Key? key}) : super(key: key);
@@ -70,12 +71,15 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
                 ),
               ),
               ElevatedButton(
-                  onPressed: () async {
-                    uploadData();
+                  onPressed: ()  async {
                     await FirebaseFirestore.instance
                         .collection(uid!)
                         .add(short.toJson());
-                    Navigator.pop(context);
+                    uploadData();
+                    await Future.delayed(const Duration(milliseconds: 5000), () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const HomeScreen()));
+                    });
                   },
                   child: const Text('Subir Archivo')),
               const Divider(height: 24),
