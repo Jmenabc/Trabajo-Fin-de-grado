@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -106,26 +108,21 @@ class _ShortsScreenState extends State<ShortsScreen> {
   Card buildCard(DocumentSnapshot<Object?> ds, FirebaseFile file) {
     return Card(
       child: ExpansionTile(
-        title: Text('${ds['name']}') ?? const Text('Desconocido'),
-        subtitle: Text('${ds['artist']}') ?? const Text('Desconocido'),
+        title: Text('${ds['name']}'),
+        subtitle: Text('${ds['artist']}'),
         children: [
           const Divider(),
           titleData(text: 'Correo'),
-          titleInfo(
-              text: '${ds['email']}' ?? 'Desconocido',
-              icon: Icons.email_outlined),
+          titleInfo(text: '${ds['email']}', icon: Icons.email_outlined),
           const Divider(),
           titleData(text: 'Número de Teléfono'),
-          titleInfo(
-              text: '${ds['phoneNumber']}' ?? 'Desconocido',
-              icon: Icons.phone_outlined),
+          titleInfo(text: '${ds['phoneNumber']}', icon: Icons.phone_outlined),
           const Divider(),
           titleData(text: 'Descripción'),
           titleInfo(
-              text: '${ds['description']}' ?? 'Desconocido',
-              icon: Icons.text_fields_outlined),
+              text: '${ds['description']}', icon: Icons.text_fields_outlined),
           const Divider(),
-          buildFile(context, file)
+          buildFile(context, file, ds)
         ],
       ),
     );
@@ -150,7 +147,11 @@ class _ShortsScreenState extends State<ShortsScreen> {
     );
   }
 
-  Widget buildFile(BuildContext context, FirebaseFile file) {
+  Widget buildFile(
+      BuildContext context2, FirebaseFile file, DocumentSnapshot<Object?> ds) {
+     String url = ds.get('video');
+    Uri myUri = Uri.parse(url);
+    print(file.url);
     final videoPlayerController = VideoPlayerController.network(file.url);
     final chewieController = ChewieController(
       videoPlayerController: videoPlayerController,

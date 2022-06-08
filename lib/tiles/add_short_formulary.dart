@@ -72,6 +72,8 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
               ),
               ElevatedButton(
                   onPressed: ()  async {
+                    final fileName = (file!.uri.pathSegments.last);
+                    short.video = fileName;
                     await FirebaseFirestore.instance
                         .collection(uid!)
                         .add(short.toJson());
@@ -192,5 +194,7 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
     final fileName = (file!.uri.pathSegments.last);
     final destination = 'files/$fileName';
     FirebaseApi.uploadFile(destination, file!);
+    print(fileName);
+    print(file!.path);
   }
 }
