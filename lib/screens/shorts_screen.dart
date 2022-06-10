@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lions_film/models/firebase_file.dart';
 import 'package:lions_film/providers/firebase_info.dart';
 import 'package:lions_film/tiles/add_short_formulary.dart';
-import 'package:lions_film/tiles/short_tile.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
@@ -122,7 +119,7 @@ class _ShortsScreenState extends State<ShortsScreen> {
           titleInfo(
               text: '${ds['description']}', icon: Icons.text_fields_outlined),
           const Divider(),
-          buildFile(context, file, ds)
+          buildFile(context, file)
         ],
       ),
     );
@@ -147,11 +144,7 @@ class _ShortsScreenState extends State<ShortsScreen> {
     );
   }
 
-  Widget buildFile(
-      BuildContext context2, FirebaseFile file, DocumentSnapshot<Object?> ds) {
-     String url = ds.get('video');
-    Uri myUri = Uri.parse(url);
-    print(file.url);
+  Widget buildFile(BuildContext context2, FirebaseFile file) {
     final videoPlayerController = VideoPlayerController.network(file.url);
     final chewieController = ChewieController(
       videoPlayerController: videoPlayerController,

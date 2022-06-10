@@ -14,7 +14,6 @@ class ShortModel {
     this.email,
     this.phoneNumber,
     this.name,
-    this.video,
   });
 
   String? description;
@@ -22,15 +21,13 @@ class ShortModel {
   String? email;
   String? phoneNumber;
   String? name;
-  String? video;
 
   factory ShortModel.fromJson(Map<String, dynamic> json) => ShortModel(
       description: json["description"],
       artist: json["artist"],
       email: json["email"],
       phoneNumber: json["phoneNumber"],
-      name: json["name"],
-      video: json["video"]);
+      name: json["name"],);
 
   Map<String, dynamic> toJson() => {
         "description": description,
@@ -38,11 +35,10 @@ class ShortModel {
         "email": email,
         "phoneNumber": phoneNumber,
         "name": name,
-        "video": video
       };
 
   @override
   String toString() {
-    return 'ShortModel{description: $description, artist: $artist, email: $email, phoneNumber: $phoneNumber, name: $name, video: $video }';
+    return 'ShortModel{description: $description, artist: $artist, email: $email, phoneNumber: $phoneNumber, name: $name}';
   }
 }

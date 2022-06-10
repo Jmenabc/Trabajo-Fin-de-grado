@@ -31,7 +31,7 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
   @override
   Widget build(BuildContext context) {
     final fileName = file != null ? (file!.path) : "no file selected";
-
+    final idVideo = FirebaseFirestore.instance.collection(uid!).doc().id;
     //Referencia a la collección
     // final destination = 'shortInf/$filePath';
     return Scaffold(
@@ -71,16 +71,17 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
                 ),
               ),
               ElevatedButton(
-                  onPressed: ()  async {
-                    final fileName = (file!.uri.pathSegments.last);
-                    short.video = fileName;
+                  onPressed: () async {
                     await FirebaseFirestore.instance
                         .collection(uid!)
                         .add(short.toJson());
-                    uploadData();
-                    await Future.delayed(const Duration(milliseconds: 5000), () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const HomeScreen()));
+                    uploadData(idVideo);
+                    await Future.delayed(const Duration(milliseconds: 5000),
+                        () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomeScreen()));
                     });
                   },
                   child: const Text('Subir Archivo')),
@@ -190,11 +191,9 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
     );
   }
 
-  void uploadData() async {
-    final fileName = (file!.uri.pathSegments.last);
-    final destination = 'files/$fileName';
+  void uploadData(String id) async {
+    // final fileName = (file!.uri.pathSegments.last);
+    final destination = 'files/$id';
     FirebaseApi.uploadFile(destination, file!);
-    print(fileName);
-    print(file!.path);
   }
 }
