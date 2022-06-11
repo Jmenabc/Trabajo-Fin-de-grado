@@ -1,64 +1,72 @@
-import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lions_film/models/models.dart';
+import 'package:lions_film/providers/providers.dart';
+import 'package:provider/provider.dart';
 
+import '../models/credits_response.dart';
 
-class CardSwiper extends StatelessWidget {
-  final List<Movie> movies;
+class CastingCards extends StatelessWidget {
+  final int movieId;
 
-  const CardSwiper({
-    Key? key,
-    required this.movies
-  }) : super(key: key);
-
+  const CastingCards(this.movieId);
 
   @override
   Widget build(BuildContext context) {
-
-    final size = MediaQuery.of(context).size;
-    // ignore: prefer_is_empty
-    if(movies.length==0) {
-      // ignore: sized_box_for_whitespace
-      return Container(
-        width: double.infinity,
-        height: size.height * 0.5,
-        child: const Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-
-
-    // ignore: sized_box_for_whitespace
-    return Container(
-      width: double.infinity,
-      height: size.height * 0.5,
-      child: Swiper(
-        itemCount: movies.length,
-        layout: SwiperLayout.STACK,
-        itemWidth: size.width * 0.6,
-        itemHeight: size.height * 0.4,
-        itemBuilder: ( _ , int index) {
-          final movie = movies[index];
-          movie.heroId = 'swiper-${movie.id}';
-          // ignore: avoid_print
-          print(movie.fullPosterImg);
-          return GestureDetector(
-            onTap: () => Navigator.pushNamed(context, 'details', arguments: movie),
-            child: Hero(
-              tag: movie.heroId!,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child:  Image(
-                  image: NetworkImage(movie.fullPosterImg),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+    final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
+    return FutureBuilder(
+        future: moviesProvider.getMovieCast(movieId),
+        builder: (_, AsyncSnapshot<List<Cast>> snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
+              height: 180,
+              child: const CupertinoActivityIndicator(),
+            );
+          }
+          final List<Cast> cast = snapshot.data!;
+          return Container(
+            margin: const EdgeInsets.only(bottom: 30),
+            width: double.infinity,
+            height: 180,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+                itemCount: 10,
+                itemBuilder: (BuildContext context, int index) =>
+                    _CastCard(cast[index])),
           );
-        },
+        });
+  }
+}
+
+class _CastCard extends StatelessWidget {
+  final Cast actor;
+
+  const _CastCard(this.actor);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      width: 110,
+      height: 100,
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image(
+                image: NetworkImage(actor.fullProfilePath),
+                width: 100,
+                height: 140,
+                fit: BoxFit.cover),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            actor.name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          )
+        ],
       ),
     );
   }
-
 }

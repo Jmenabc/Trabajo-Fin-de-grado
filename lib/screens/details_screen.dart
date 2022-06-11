@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lions_film/models/models.dart';
 import 'package:lions_film/widgets/card_swiper.dart';
+import 'package:lions_film/widgets/casting_cards.dart';
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class DetailsScreen extends StatelessWidget {
             delegate: SliverChildListDelegate([
               _PosterAndTitle(movie),
               _Overview(movie),
-
+                CastingCards(movie.id)
 
             ]),
           ),

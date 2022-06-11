@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:lions_film/models/short_model.dart';
 import 'package:lions_film/providers/firebase_api.dart';
 import 'package:lions_film/screens/home_screen.dart';
+import 'package:lions_film/screens/short_uploaded_screen.dart';
 
 class AddShortFormulary extends StatefulWidget {
   const AddShortFormulary({Key? key}) : super(key: key);
@@ -77,12 +78,12 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
                         .add(short.toJson());
                   final uidD = doc.id;
                     uploadData(uidD);
-                    await Future.delayed(const Duration(milliseconds: 5000),
+                    await Future.delayed(const Duration(milliseconds: 3000),
                         () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const HomeScreen()));
+                              builder: (context) => const ShortUploadedScreen()));
                     });
                   },
                   child: const Text('Subir Archivo')),
@@ -102,9 +103,7 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
         child: TextField(
           decoration: const InputDecoration(label: Text('Número de teléfono')),
           onChanged: (phoneNumberData) {
-            phoneNumberData == ""
-                ? phoneNumberData = "No disponible"
-                : short.phoneNumber = phoneNumberData;
+            short.phoneNumber = phoneNumberData;
           },
         ),
       ),
