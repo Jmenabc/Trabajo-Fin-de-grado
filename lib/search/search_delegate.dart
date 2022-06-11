@@ -42,7 +42,7 @@ class MovieSearchDelegate extends SearchDelegate{
 
   @override
   Widget buildResults(BuildContext context) {
-    return const Text('BuildResults');
+    return const Text('Error');
   }
 
   @override

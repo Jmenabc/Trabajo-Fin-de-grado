@@ -105,19 +105,24 @@ class _ShortsScreenState extends State<ShortsScreen> {
   Card buildCard(DocumentSnapshot<Object?> ds, FirebaseFile file) {
     return Card(
       child: ExpansionTile(
-        title: Text('${ds['name']}'),
-        subtitle: Text('${ds['artist']}'),
+        title: Text('${ds['name'] ?? 'Desconocido'}'),
+        subtitle: Text('${ds['artist'] ?? 'Desconocido'}'),
         children: [
           const Divider(),
           titleData(text: 'Correo'),
-          titleInfo(text: '${ds['email']}', icon: Icons.email_outlined),
+          titleInfo(
+              text: '${ds['email'] ?? 'Desconocido'}',
+              icon: Icons.email_outlined),
           const Divider(),
           titleData(text: 'Número de Teléfono'),
-          titleInfo(text: '${ds['phoneNumber']}', icon: Icons.phone_outlined),
+          titleInfo(
+              text: '${ds['phoneNumber'] ?? 'Desconocido'}',
+              icon: Icons.phone_outlined),
           const Divider(),
           titleData(text: 'Descripción'),
           titleInfo(
-              text: '${ds['description']}', icon: Icons.text_fields_outlined),
+              text: '${ds['description'] ?? 'Desconocido'}',
+              icon: Icons.text_fields_outlined),
           const Divider(),
           buildFile(context, file)
         ],
