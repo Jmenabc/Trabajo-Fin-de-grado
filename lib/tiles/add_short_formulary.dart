@@ -18,6 +18,7 @@ class AddShortFormulary extends StatefulWidget {
 class _AddShortFormularyState extends State<AddShortFormulary> {
   ShortModel short = ShortModel();
 
+
   //Datos del modelo
   final uid = FirebaseAuth.instance.currentUser?.uid;
   String description = "";
@@ -31,7 +32,6 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
   @override
   Widget build(BuildContext context) {
     final fileName = file != null ? (file!.path) : "no file selected";
-    final idVideo = FirebaseFirestore.instance.collection(uid!).doc().id;
     //Referencia a la collección
     // final destination = 'shortInf/$filePath';
     return Scaffold(
@@ -72,10 +72,11 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
               ),
               ElevatedButton(
                   onPressed: () async {
-                    await FirebaseFirestore.instance
+                   final doc = await FirebaseFirestore.instance
                         .collection(uid!)
                         .add(short.toJson());
-                    uploadData(idVideo);
+                  final uidD = doc.id;
+                    uploadData(uidD);
                     await Future.delayed(const Duration(milliseconds: 5000),
                         () {
                       Navigator.push(
@@ -192,8 +193,10 @@ class _AddShortFormularyState extends State<AddShortFormulary> {
   }
 
   void uploadData(String id) async {
-    // final fileName = (file!.uri.pathSegments.last);
+
     final destination = 'files/$id';
     FirebaseApi.uploadFile(destination, file!);
   }
+
+//To retrieve the string
 }
