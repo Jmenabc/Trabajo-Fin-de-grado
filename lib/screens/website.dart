@@ -33,7 +33,7 @@ class Website extends StatelessWidget {
             child: TextButton(
                 onPressed: () {
                   launch(
-                      'https://codea.app/blog/cargar-url-flutter#:~:text=Cargar%20una%20url%20en%20Flutter&text=Para%20ello%20usamos%20el%20paquete,evento%20click%20en%20la%20app.');
+                      'https://login-d3486.web.app/');
                 },
                 child: const Text('Página web')),
           ),
